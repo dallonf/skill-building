@@ -22,86 +22,88 @@ Second var is if I should lose, draw or win.
 // 4880 is to low
 // 14666 is to high
 
-const rock = 1;
-const paper = 2;
-const scissors = 3;
+const ROCK_SCORE = 1;
+const PAPER_SCORE = 2;
+const SCISSORS_SCORE = 3;
 
-const win = 6;
-const loss = 0;
-const draw = 3;
+const WIN_SCORE = 6;
+const LOSS_SCORE = 0;
+const DRAW_SCORE = 3;
 
 /**
  *
- * @param {string[]} game
- * @returns {number}
+ * @param {string[]} round
+ * @returns {number} Numeric code indicating ROCK_SCORE, PAPER_SCORE, or SCISSORS_SCORE
  */
-const opp = (game) => {
-  if (game[0] === "A") {
-    return rock;
-  } else if (game[0] === "B") {
-    return paper;
+const getOpponentsMove = (round) => {
+  if (round[0] === "A") {
+    return ROCK_SCORE;
+  } else if (round[0] === "B") {
+    return PAPER_SCORE;
   } else {
-    return scissors;
+    return SCISSORS_SCORE;
   }
 };
 
 /**
  *
- * @param {string[]} game
- * @returns {number}
+ * @param {string[]} round
+ * @returns {number} Numeric code indicating WIN_SCORE, LOSS_SCORE, or DRAW_SCORE
  */
-const outcome = (game) => {
-  if (game[1] === "X") {
-    return loss;
-  } else if (game[1] === "Y") {
-    return draw;
+const getOutcome = (round) => {
+  if (round[1] === "X") {
+    return LOSS_SCORE;
+  } else if (round[1] === "Y") {
+    return DRAW_SCORE;
   } else {
-    return win;
+    return WIN_SCORE;
   }
 };
 
 /**
  *
- * @param {number} opp
- * @param {number} outcome
- * @returns {number}
+ * @param {number} opponentsMove Numeric code indicating ROCK_SCORE, PAPER_SCORE, or SCISSORS_SCORE
+ * @param {number} intendedOutcome Numeric code indicating WIN_SCORE, LOSS_SCORE, or DRAW_SCORE
+ * @returns {number} Numeric code indicating ROCK_SCORE, PAPER_SCORE, or SCISSORS_SCORE
  */
 
-const self = (opp, outcome) => {
-  if (opp === rock) {
-    if (outcome === loss) {
-      return scissors;
-    } else if (outcome === draw) {
-      return rock;
+const getOwnMove = (opponentsMove, intendedOutcome) => {
+  if (opponentsMove === ROCK_SCORE) {
+    if (intendedOutcome === LOSS_SCORE) {
+      return SCISSORS_SCORE;
+    } else if (intendedOutcome === DRAW_SCORE) {
+      return ROCK_SCORE;
     } else {
-      return paper;
+      return PAPER_SCORE;
     }
-  } else if (opp === paper) {
-    if (outcome === loss) {
-      return rock;
-    } else if (outcome === draw) {
-      return paper;
+  } else if (opponentsMove === PAPER_SCORE) {
+    if (intendedOutcome === LOSS_SCORE) {
+      return ROCK_SCORE;
+    } else if (intendedOutcome === DRAW_SCORE) {
+      return PAPER_SCORE;
     } else {
-      return scissors;
+      return SCISSORS_SCORE;
     }
   } else {
-    if (outcome === loss) {
-      return paper;
-    } else if (outcome === draw) {
-      return scissors;
+    if (intendedOutcome === LOSS_SCORE) {
+      return PAPER_SCORE;
+    } else if (intendedOutcome === DRAW_SCORE) {
+      return SCISSORS_SCORE;
     } else {
-      return rock;
+      return ROCK_SCORE;
     }
   }
 };
 
-const gameCalc = splitFile.map((game) => {
-  return self(opp(game), outcome(game)) + outcome(game);
+const gameScores = splitFile.map((round) => {
+  return (
+    getOwnMove(getOpponentsMove(round), getOutcome(round)) + getOutcome(round)
+  );
 });
 
-const sumOfAllGames = gameCalc.reduce((a, b) => a + b, 0);
+const sumOfAllGameScores = gameScores.reduce((a, b) => a + b, 0);
 
-console.log(sumOfAllGames);
+console.log(sumOfAllGameScores);
 
 // const replacedValues = splitFile.map((a) =>
 //   a.map((b) => {
